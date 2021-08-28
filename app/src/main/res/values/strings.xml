@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Frida Setup</string>
+    <string name="start_server">Start Server</string>
+    <string name="stop_server">Stop Server</string>
+    <string name="restart_server">Restart Server</string>
+    <string name="download_server">Download Server</string>
+</resources>
