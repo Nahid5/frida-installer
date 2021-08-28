@@ -1,15 +1,27 @@
 package com.example.fridasetup
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import java.io.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val rootExec = RootHelper()
+
+        // Storing data into SharedPreferences
+        var sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE)
+        // Creating an Editor object to edit(write to the file)
+        var myEdit = sharedPreferences.edit()
+        // Storing the key and its value as the data fetched from edittext
+        myEdit.putString("name", "Test Name")
+        myEdit.putInt("age", 12)
+        // Once the changes have been made,
+        // we need to commit to apply those changes made,
+        // otherwise, it will throw an error
+        myEdit.commit()
 
         //val cmds: Array<String> = arrayOf("touch /sdcard/Download/and_std.txt\n")
         //runAsRoot(cmds)
@@ -19,9 +31,9 @@ class MainActivity : AppCompatActivity() {
             //val toast = Toast.makeText(this, "Dice Rolled!", Toast.LENGTH_SHORT)
             //toast.show()
             var cmd: String = "pwd"
-            runAsRoot2(cmd)
-            cmd = "ls"
-            runAsRoot2(cmd)
+            rootExec.runAsRoot2(cmd)
+            //cmd = "touch /sdcard/Download/andhthasd.txt; touch /sdcard/Download/andhthasd2.txt"
+            //rootExec.runAsRoot2(cmd)
         }
         /***************** Stop Server **********************/
         /***************** Restart Server Server **********************/
@@ -30,74 +42,9 @@ class MainActivity : AppCompatActivity() {
         downloadServerButton.setOnClickListener {
             //val toast = Toast.makeText(this, "Dice Rolled!", Toast.LENGTH_SHORT)
             //toast.show()
-            val cmd: String = "ls -la /"
-            runAsRoot2(cmd)
+            val cmd: String = "cd /data/local/tmp/; touch a.txt"
+            rootExec.runAsRoot2(cmd)
         }
     }
 
-    fun runAsRoot2(cmds: String) {
-        /*
-        * cmds: String of commands to be executed as root
-        *
-         */
-        var line: String
-        var process = Runtime.getRuntime().exec("su")
-        var stdin: OutputStream = process.outputStream
-        var stderr: InputStream = process.errorStream
-        var stdout: InputStream = process.inputStream
-
-        // Add new line to cut off the command
-        var cmdToExecute = cmds + "\n"
-        stdin.write(cmdToExecute.toByteArray())
-        stdin.write("exit\n".toByteArray())     // Exit the shell window
-        stdin.flush()
-        stdin.close()
-
-        /****************************** Print stdout ***************************/
-        var br = BufferedReader(InputStreamReader(stdout))
-        try {
-            line = br.readLine()
-            while (line != null) {
-                //println("[Output] " + line)
-                Log.i("STDOUT: ",line)
-                line = br.readLine()
-            }
-        } catch (ex: Exception) {
-            Log.i("CONSOLE ERR: ",ex.toString())
-        }
-        br.close()
-
-        /****************************** Print stderr ***************************/
-        br = BufferedReader(InputStreamReader(stderr))
-        try {
-            line = br.readLine()
-            while (line != null) {
-                Log.i("STDOUT: ",line)
-                line = br.readLine()
-            }
-        } catch (ex: Exception) {
-            Log.i("CONSOLE ERR: ",ex.toString())
-        }
-        br.close()
-
-        process.waitFor()
-        process.destroy()
-    }
-
-    fun runAsRoot(cmds: Array<String>) {
-        /*
-        * cmds: Array of commands to be executed as root
-         */
-        val p = Runtime.getRuntime().exec("su")
-        val os = DataOutputStream(p.outputStream)
-        for (tmpCmd in cmds) {
-            os.writeBytes(
-                """
-                $tmpCmd
-                """.trimIndent()
-            )
-        }
-        os.writeBytes("exit\n")
-        os.flush()
-    }
 }
