@@ -10,6 +10,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val rootExec = RootHelper()
+        val helperFunc = Helper()
 
         // Storing data into SharedPreferences
         var sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE)
@@ -22,6 +23,8 @@ class MainActivity : AppCompatActivity() {
         // we need to commit to apply those changes made,
         // otherwise, it will throw an error
         myEdit.commit()
+
+
 
         //val cmds: Array<String> = arrayOf("touch /sdcard/Download/and_std.txt\n")
         //runAsRoot(cmds)
@@ -42,8 +45,9 @@ class MainActivity : AppCompatActivity() {
         downloadServerButton.setOnClickListener {
             //val toast = Toast.makeText(this, "Dice Rolled!", Toast.LENGTH_SHORT)
             //toast.show()
-            val cmd: String = "cd /data/local/tmp/; touch a.txt"
-            rootExec.runAsRoot2(cmd)
+            helperFunc.download("https://google.com", "/sdcard/Download/a")
+            //val cmd: String = "cd /data/local/tmp/; touch a.txt"
+            //rootExec.runAsRoot2(cmd)
         }
     }
 
