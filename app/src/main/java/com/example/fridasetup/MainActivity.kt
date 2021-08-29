@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
         myEdit.commit()
 
 
-
         //val cmds: Array<String> = arrayOf("touch /sdcard/Download/and_std.txt\n")
         //runAsRoot(cmds)
         /***************** Star Server **********************/
@@ -45,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         downloadServerButton.setOnClickListener {
             //val toast = Toast.makeText(this, "Dice Rolled!", Toast.LENGTH_SHORT)
             //toast.show()
-            helperFunc.download("https://google.com", "/sdcard/Download/a")
+            helperFunc.downloadFrida()
             //val cmd: String = "cd /data/local/tmp/; touch a.txt"
             //rootExec.runAsRoot2(cmd)
         }

@@ -55,6 +55,7 @@ class RootHelper {
         process.destroy()
     }
 
+
     fun runAsRoot(cmds: Array<String>) {
         /*
         * cmds: Array of commands to be executed as root
